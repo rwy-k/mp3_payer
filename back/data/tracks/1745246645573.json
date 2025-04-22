@@ -1,0 +1,12 @@
+{
+  "title": "test",
+  "artist": "test",
+  "album": "test",
+  "genres": [],
+  "coverImage": "",
+  "slug": "test",
+  "id": "1745246645573",
+  "createdAt": "2025-04-21T14:44:05.573Z",
+  "updatedAt": "2025-04-21T14:52:22.999Z",
+  "audioFile": "1745246645573.mp3"
+}
