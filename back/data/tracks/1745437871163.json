@@ -1,0 +1,16 @@
+{
+  "title": "test",
+  "artist": "tset",
+  "album": "test",
+  "genres": [
+    "Rock",
+    "Hip Hop",
+    "Jazz"
+  ],
+  "coverImage": "https://vissevasse.com/cdn/shop/products/Listen_to_the_music_6b8907ea-bb9c-4317-b21c-f0a259da3b98.jpg",
+  "slug": "test",
+  "id": "1745437871163",
+  "createdAt": "2025-04-23T19:51:11.163Z",
+  "updatedAt": "2025-04-23T22:48:45.677Z",
+  "audioFile": "1745437871163.mp3"
+}

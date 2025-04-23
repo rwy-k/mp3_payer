@@ -5,11 +5,6 @@ export const sortFields = [{
     label: 'Title',
     value: 'title',
 }, {
-    label: 'Genre',
-    value: 'genre'
+    label: 'Genres',
+    value: 'genres'
 }]
-
-export const filterFields = [
-    'artist',
-    'genre'
-]

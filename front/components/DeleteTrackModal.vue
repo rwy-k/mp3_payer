@@ -11,12 +11,12 @@
     </Modal>
 </template>
 <script setup lang="ts">
-import { AlertType } from '~/types/components';
+import { AlertType } from '@/types/components';
 import Alert from './common/Alert.vue';
 import Modal from './common/Modal.vue';
 import Button from './common/Button.vue';
-import { deleteTrack } from '~/api/tracks';
-import type { Track } from '~/types/tracks';
+import { deleteTrack } from '@/api/tracks';
+import type { Track } from '@/types/tracks';
 
 const props = defineProps({
     tracks: {

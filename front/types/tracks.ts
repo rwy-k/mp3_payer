@@ -10,8 +10,3 @@ export type Track = {
     createdAt?: string;
     updatedAt?: string;
 };
-
-export enum SortOptions {
-    DESC = false,
-    ASC = true,
-}

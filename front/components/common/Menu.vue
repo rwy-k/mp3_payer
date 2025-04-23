@@ -4,7 +4,7 @@
             {{ props.label }}
             <span class="material-symbols-outlined" >{{ !showBody ? 'arrow_drop_down' : 'arrow_drop_up'}}</span>
         </button>
-        <div v-show="showBody" class="absolute w-full cursor-pointer bg-white shadow-lg rounded-md p-2 z-10 max-h-30 overflow-scroll">
+        <div v-show="showBody" class="absolute right-1 w-30 cursor-pointer bg-white shadow-lg rounded-md p-2 z-10 max-h-30 overflow-scroll">
             <div 
                 v-for="option in props.options" 
                 :key="option.value" 
@@ -18,8 +18,8 @@
     </div>
 </template>
 <script lang="ts" setup> 
-import type {Option} from '~/types/components';
-import { useOutsideClick } from '~/composables/useOutsideClick';
+import type {Option} from '@/types/components';
+import { useOutsideClick } from '@/composables/useOutsideClick';
 const props = defineProps({
     label: {
         type: String,

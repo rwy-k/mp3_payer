@@ -22,9 +22,11 @@
     "@tailwindcss/postcss": "^4.1.4",
     "@unhead/vue": "^2.0.8",
     "eslint": "^9.25.0",
+    "howler": "^2.2.4",
     "lodash": "^4.17.21",
     "nuxt": "^3.16.2",
     "pinia": "^3.0.2",
+    "pinia-plugin-persistedstate": "^4.2.0",
     "postcss": "^8.0.0",
     "tailwindcss": "^4.1.4",
     "typescript": "^5.8.3",
@@ -34,6 +36,7 @@
   },
   "devDependencies": {
     "@nuxt/postcss8": "^1.0.0",
+    "@types/howler": "^2.2.12",
     "@types/lodash": "^4.17.16",
     "sass-embedded": "^1.86.3"
   },

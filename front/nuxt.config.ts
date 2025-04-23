@@ -23,15 +23,10 @@ export default defineNuxtConfig({
     layoutTransition: { name: 'layout', mode: 'out-in' },
     pageTransition: { name: 'page', mode: 'out-in' },
   },
-  modules: [
-    '@nuxt/content',
-    '@nuxt/eslint',
-    '@nuxt/ui',
-    '@nuxt/test-utils',
-    '@nuxt/scripts',
-    '@nuxt/fonts',
-    '@pinia/nuxt',
+  plugins: [
+    { src: '~/plugins/pinia-persistence.ts', mode: 'client' },
   ],
+  modules: ['@nuxt/content', '@nuxt/eslint', '@nuxt/ui', '@nuxt/test-utils', '@nuxt/scripts', '@nuxt/fonts', '@pinia/nuxt'],
   build: {
     postcss: {
       plugins: {

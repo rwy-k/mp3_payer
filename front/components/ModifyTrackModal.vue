@@ -1,13 +1,14 @@
 <template>
     <Modal :label="props.trackToEdit ? 'Edit track' : 'Add new track'" @close="emit('close')">
         <div>
-            <form class="flex flex-col gap-4" @submit.prevent="handleFormSubmit">
+            <form class="flex flex-col gap-4" data-testid="track-form" @submit.prevent="handleFormSubmit">
                 <InputField 
                     v-model="track.title"
                     label="Title"
                     placeholder="Enter title"
                     :disabled="inputsDisabled"
                     required
+                    data-testid="input-title"
                 /> 
                 <InputField
                     v-model="track.artist"
@@ -15,6 +16,7 @@
                     placeholder="Enter artist"
                     :disabled="inputsDisabled"
                     required
+                    data-testid="input-artist"
                 />
                 <InputField
                     v-model="track.album"
@@ -22,6 +24,7 @@
                     placeholder="Enter album"
                     :disabled="inputsDisabled"
                     required
+                    data-testid="input-album"
                 />
                 <Dropdown
                     v-model="trackGenres"
@@ -29,29 +32,18 @@
                     label="Genres"
                     :disabled="inputsDisabled"
                     placeholder="Enter genre"
+                    data-testid="input-cover-image"
                 />
-                <div class="flex gap-1 items-end">
-                    <InputField
-                        v-model="track.coverImage"
-                        label="Cover"
-                        :disabled="inputsDisabled"
-                        placeholder="Enter image URL or "
-                    />
-                    <Button
-                        type="button"
-                        :disabled="inputsDisabled"
-                        @click="uploadFile"
-                    >Upload</Button>
-                    <input 
-                        ref="fileInput" 
-                        type="file" 
-                        accept="image/*" 
-                        class="hidden" 
-                        @change="onFileSelected" 
-                    >
-                </div>
+                <InputField
+                    v-model="track.coverImage"
+                    label="Cover"
+                    :disabled="inputsDisabled"
+                    :error="urlError"
+                    placeholder="Enter image URL or "
+                    data-testid="genre-selector"
+                />
                 
-                <Button v-show="!loading && !error && !success" type="submit">{{ props.trackToEdit ? 'Save changes' : 'Create track' }}</Button>
+                <Button v-show="!loading && !error && !success" :disabled="submitDisabled" data-testid="submit-button" type="submit">{{ props.trackToEdit ? 'Save changes' : 'Create track' }}</Button>
             </form>
             <Alert v-if="error" :type="AlertType.ERROR">{{ error }}</Alert>
             <Alert v-else-if="success" :type="AlertType.SUCCESS">Track {{props.trackToEdit ? 'updated' : 'created'}} successfully!</Alert>
@@ -60,15 +52,15 @@
     </Modal>
 </template>
 <script setup lang="ts">
-import type { Track } from '~/types/tracks';
-import { AlertType } from '~/types/components';
+import type { Track } from '@/types/tracks';
+import { AlertType } from '@/types/components';
 import InputField from './common/InputField.vue';
 import Button from './common/Button.vue';
 import Dropdown from './common/Dropdown.vue';
 import Alert from './common/Alert.vue';
 import Modal from './common/Modal.vue';
-import { addTrack, updateTrack } from '~/api/tracks';
-import { getGenres } from '~/api/genres';
+import { addTrack, updateTrack } from '@/api/tracks';
+import { getGenres } from '@/api/genres';
 
 const props = defineProps({
     trackToEdit: {
@@ -89,7 +81,6 @@ const track = ref<Track>({
     genres: [],
 });
 const availableGenres = ref<{label: string; value: string;}[]>([])
-const fileInput = ref<HTMLInputElement | null>(null);
 
 const trackGenres = computed({
     get: () => track.value.genres.map((genre) => ({
@@ -100,29 +91,16 @@ const trackGenres = computed({
         track.value.genres = value.map((genre) => genre.value);
     },
 })
-
+const urlError = computed(() => {
+    const urlPattern = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i;
+    return track.value.coverImage && !urlPattern.test(track.value.coverImage) ? 'Invalid URL' : undefined;
+});
+const submitDisabled = computed(() => {
+    return !track.value.title || !track.value.artist || !!urlError.value;
+});
 const inputsDisabled = computed(() => {
     return loading.value || success.value;
 });
-
-const uploadFile = async () => {
-    if (fileInput.value) {
-        fileInput.value.click();
-    }
-};
-
-const onFileSelected = (event: Event) => {
-    const target = event.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-        const file = target.files[0];
-        // Create URL for the uploaded file
-        const imageUrl = URL.createObjectURL(file);
-        track.value.coverImage = imageUrl;
-        
-        // Optional: Display preview or file name
-        console.log(`File selected: ${file.name}`);
-    }
-};
 
 const handleFormSubmit = async () => {
     loading.value = true;
