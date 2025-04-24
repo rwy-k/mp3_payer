@@ -32,4 +32,15 @@ Locally preview production build:
 npm run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+///////////////////////////////////
+### Extra Tasks
+
+1. Implement bulk delete functionality (select multiple or all tracks and delete them).
+
+- added possibility to select several tracks and delete the at once
+
+2. Add visualization for the audiowave of currently played track.
+
+- implemented as separate component Player (for now)
+////////////////////////////////////
