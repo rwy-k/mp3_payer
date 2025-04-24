@@ -1,12 +1,14 @@
 <template>
-    <div class="p-4 rounded-md shadow-md flex items-center gap-2" :class="[styles[props.type], 'w-full']">
-        <span class="material-symbols-outlined">{{ props.icon }}</span>
-        <slot />
-        <span
-            v-if="props.close"
-            class="material-symbols-outlined cursor-pointer"
-            @click="emit('close')"
-        >close</span>
+    <div data-testid="toast-container">
+        <div class="p-4 rounded-md shadow-md flex items-center gap-2" :class="[styles[props.type], 'w-full']" :data-testid="`toast-${props.type}`">
+            <span class="material-symbols-outlined">{{ props.icon }}</span>
+            <slot />
+            <span
+                v-if="props.close"
+                class="material-symbols-outlined cursor-pointer"
+                @click="emit('close')"
+            >close</span>
+        </div>
     </div>
 </template>
 <script setup lang="ts">

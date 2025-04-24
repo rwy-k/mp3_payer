@@ -25,6 +25,7 @@ const initializeAudioVisualization = () => {
     
     // Create audio context if not exists
     if (!audioContext) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
         audioSource = audioContext.createMediaElementSource(audioElement.value);
         analyser = audioContext.createAnalyser();

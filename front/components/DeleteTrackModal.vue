@@ -1,12 +1,14 @@
 <template>
-    <Modal label="Delete Modal" @close="emit('close')">
+    <Modal label="Delete Modal" data-testid="confirm-dialog" @close="emit('close')">
         {{ deleteMessage }}
-        <Alert v-if="error" :type="AlertType.ERROR" class="my-3">{{ error }}</Alert>
-        <Alert v-else-if="success" :type="AlertType.SUCCESS" class="my-3">Deleted successfully!</Alert>
-        <Alert v-else-if="loading" :type="AlertType.INFO" class="my-3">Deleting...</Alert>
+        <div data-testid="toast-container">
+            <Alert v-if="error" :type="AlertType.ERROR" class="my-3">{{ error }}</Alert>
+            <Alert v-else-if="success" :type="AlertType.SUCCESS" class="my-3">Deleted successfully!</Alert>
+            <Alert v-else-if="loading" data-loading="true" :type="AlertType.INFO" class="my-3">Deleting...</Alert>
+        </div>
         <div v-i="!loading && !error && !success" class="flex justify-end gap-2 mt-2">
-            <Button @click="emit('close')">Cancel</Button>
-            <Button @click="handleDeleteTrack">Delete</Button>
+            <Button data-testid="cancel-delete" @click="emit('close')">Cancel</Button>
+            <Button data-testid="confirm-delete" @click="handleDeleteTrack">Delete</Button>
         </div>
     </Modal>
 </template>

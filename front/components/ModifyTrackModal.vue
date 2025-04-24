@@ -47,7 +47,7 @@
             </form>
             <Alert v-if="error" :type="AlertType.ERROR">{{ error }}</Alert>
             <Alert v-else-if="success" :type="AlertType.SUCCESS">Track {{props.trackToEdit ? 'updated' : 'created'}} successfully!</Alert>
-            <Alert v-else-if="loading" :type="AlertType.INFO">Saving track...</Alert>
+            <Alert v-else-if="loading" :type="AlertType.INFO" data-loading="true">Saving track...</Alert>
         </div>
     </Modal>
 </template>

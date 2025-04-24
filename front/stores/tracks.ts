@@ -1,51 +1,29 @@
 import { defineStore } from 'pinia';
 import type { Track } from '@/types/tracks';
 
-interface Upload {
-    id: string;
-    url: string;
-}
-
-// Define the store state interface
 interface TracksState {
-  uploads: Upload[];
-  currentTrack: Track | null;
+  tracks: Track[];
+  currentTrack: Track | null; 
+  isPlaying: boolean;
   error: string | null;
 }
-
-const loadState = (): Partial<TracksState> => {
-    try {
-      const savedState = localStorage.getItem('tracks-store');
-      console.log('Loading state from localStorage:', savedState);
-      return savedState ? JSON.parse(savedState) : {};
-    } catch (e) {
-      console.error('Error loading state:', e);
-      return {};
-    }
-  };
 
 // Create and export the tracks store
 export const useTracksStore = defineStore('tracks', {
   state: (): TracksState => {
     return {
-      uploads: [],
+      tracks: [],
       currentTrack: null,
+      isPlaying: false,
       error: null,
     };
   },
   
   getters: {
+    getTracks: (state) => state.tracks,
     getCurrentTrack: (state) => state.currentTrack,
-
-    getUploads: (state) => state.uploads,
-
-    getMusicToPlay: (state) =>  {
-        if (state.currentTrack) {
-            const musicToPlay = state.uploads.find(upload => upload.id === state.currentTrack!.id);
-            return musicToPlay ? musicToPlay.url : null;
-        }
-        return null;
-    }
+    getError: (state) => state.error,
+    getIsPlaying: (state) => state.isPlaying,
   },
   
   actions: {
@@ -53,9 +31,42 @@ export const useTracksStore = defineStore('tracks', {
         this.currentTrack = track;
     },
 
-    addMusic(id: string, url: string) {
-        this.uploads.push({ id, url });
+    playTrack() {
+        this.isPlaying = true;
     },
+    togglePlay() {
+      this.isPlaying = !this.isPlaying;
+    },
+    pauseTrack() {
+        this.isPlaying = false;
+    },
+    stopTrack() {
+      this.currentTrack = null;
+    },
+
+    setError(error: string | null) {
+        this.error = error;
+    },
+
+    addTrack(track: Track) {
+        this.tracks.push(track);
+    },
+
+    setTracks(tracks: Track[]) {
+        this.tracks = tracks;
+    },
+
+    deleteTrack(trackId: string) {
+        this.tracks = this.tracks.filter((track) => track.id !== trackId);
+    },
+
+    updateTrack(trackId: string, updatedTrack: Partial<Track>) {
+        const trackIndex = this.tracks.findIndex((track) => track.id === trackId);
+        if (trackIndex !== -1) {
+            this.tracks[trackIndex] = { ...this.tracks[trackIndex], ...updatedTrack };
+        }
+    },
+
   },
   persist: true,
 });

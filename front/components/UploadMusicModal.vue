@@ -20,7 +20,7 @@
 
         <Alert v-else-if="error" :type="AlertType.ERROR">{{ error }}</Alert>
         <Alert v-else-if="success" :type="AlertType.SUCCESS">Music {{selectedFile ? 'uploaded' : 'deleted'}} successfully!</Alert>
-        <Alert v-else-if="loading" :type="AlertType.INFO">Uploading music...</Alert>
+        <Alert v-else-if="loading" :type="AlertType.INFO" data-loading="true">Uploading music...</Alert>
     </Modal>
 </template>
 <script setup lang="ts">

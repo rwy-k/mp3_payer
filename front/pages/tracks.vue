@@ -1,14 +1,14 @@
 <template>
     <div class="flex flex-col gap-4 w-full h-full">
         <div class="flex items-end">
-            <h1 class="mx-auto text-4xl mt-8" data-testid="tracks-header">Music Tracks</h1>
+            <h1 class="ml-8 mr-auto text-4xl mt-8" data-testid="tracks-header">Music Tracks</h1>
             <div class="flex gap-2 h-9 mb-1 mr-8">
                 <!-- <Button @click="fetchTracks">Refresh</Button> -->
                 <Button data-testid="create-track-button" @click="showAddTrackModal = true">Create</Button>
                 <Button :disabled="!selectedTracks.length" @click="showDeleteTrackModal = true">Delete</Button>
             </div>
         </div>
-        <div class="flex items-center p-3 border-b border-t border-gray-300">
+        <div class="flex items-center p-3 border-b border-t border-blue-950">
             <div class="items-center flex gap-2" data-testid="pagination">
                 <IconButton :disabled="currentPage === 1" data-testid="pagination-prev" @click="handlePageChange(currentPage - 1)">arrow_back</IconButton>
                 <b>{{ currentPage }}</b> / {{ maxPageNumber }}
@@ -20,14 +20,14 @@
                     data-testid="search-input"
                     type="text"
                     placeholder="Search by title, artist, or album"
-                    class="border border-gray-300 rounded px-2 py-1 w-64"
+                    class="border border-blue-950 rounded px-2 py-1 w-64"
                     @input="debouncedSearch = searchQuery"
                 >
-                <span class="material-symbols-outlined text-gray-300">search</span>
+                <span class="material-symbols-outlined text-blue-950">search</span>
             </div>
             <Menu v-model="sortSettings" data-testid="sort-select" class="flex gap-2 ml-auto" label="Sort by" :options="sortFields"/>
         </div>
-        <div class="flex items-center gap-2 pb-3 px-3 mx-auto w-full border-b border-gray-300">
+        <div class="flex items-center gap-2 pb-3 px-3 mx-auto w-full border-b border-blue-950">
             <Dropdown 
                 v-model="filterSettings.artist"
                 :options="filterFields.artist"
@@ -52,8 +52,15 @@
             @upload="track => { selectedTrack = track; showUploadTrackModal = true; }"
         />
         <Alert v-else :type="AlertType.INFO">No tracks available.</Alert>
+        
+        <InlinePlayer
+            v-if="trackToPlay && trackToPlay.audioFile"
+            class="mb-4"
+        />
+        
         <Alert v-if="error" :type="AlertType.ERROR">{{ error }}</Alert>
-        <Alert v-if="loading" :type="AlertType.INFO">Loading tracks...</Alert>
+        <Alert v-if="loading" :type="AlertType.INFO" data-testid="loading-tracks" data-loading="true">Loading tracks...</Alert>
+
 
         <ModifyTrackModal
             v-if="showAddTrackModal || showEditTrackModal"
@@ -79,14 +86,14 @@
 import { getAllTracks } from '../api/tracks';
 import type { Track } from '@/types/tracks';
 import { sortFields } from './constants';
-import { Button, ModifyTrackModal, TracksList, IconButton, Dropdown } from '@/components';
+import { Button, ModifyTrackModal, TracksList, IconButton, Dropdown, InlinePlayer, DeleteTrackModal, UploadMusicModal, Menu } from '@/components';
 import Alert from '@/components/common/Alert.vue';
 import { AlertType, type Option } from '@/types/components';
-import DeleteTrackModal from '@/components/DeleteTrackModal.vue';
-import UploadMusicModal from '@/components/UploadMusicModal.vue';
-import Menu from '@/components/common/Menu.vue';
 import sortBy from 'lodash/sortBy';
 import { getGenres } from '@/api/genres';
+import { useTracksStore } from '#imports';
+
+const store = useTracksStore();
 
 const loading = ref(false);
 const error = ref<string | null>(null);
@@ -116,6 +123,9 @@ const filterFields = reactive({
 const tracks = ref<Track[]>([]);
 const selectedTrack = ref<Track | null>(null);
 const selectedTracks = ref<Track[]>([]);
+const trackToPlay = computed(() => {
+    return store.currentTrack;
+});
 
 const maxPageNumber = computed(() => {
     return Math.ceil(tracks.value.length / itemsPerPage.value) || 1; // can't be zero pages

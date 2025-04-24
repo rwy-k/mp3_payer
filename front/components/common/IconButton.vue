@@ -1,7 +1,9 @@
 <template>
     <button 
         class="material-symbols-outlined cursor-pointer rounded-4xl p-1" 
-        :class="{ 'text-gray-300 !cursor-default': props.disabled, 'hover:bg-blue-100': !props.disabled }" 
+        :class="{ 'text-gray-400 !cursor-default': props.disabled, 'hover:bg-blue-100': !props.disabled }" 
+        :disabled="props.disabled"
+        :aria-disabled="props.disabled"
         @click="emit('click')"
     >
         <slot />
