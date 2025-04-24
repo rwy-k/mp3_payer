@@ -13,17 +13,17 @@
                 </div>
                 <audio
                     ref="audioPlayer"
-                    :src="currentTrack.audioFile"
+                    :src="`${currentTrack.audioFile}`"
+                    class="hidden"
                     @ended="stopTrack"
                     @timeupdate="updateProgress"
-                    class="hidden"
                 />
                 <div class="flex-1">
                     <div class="w-full bg-gray-200 rounded-full h-2">
                         <div
                             class="bg-blue-600 h-2 rounded-full"
                             :style="{ width: `${progress}%` }"
-                        ></div>
+                        />
                     </div>
                 </div>
                 <IconButton @click="togglePlay">
@@ -56,8 +56,8 @@
             <div class="flex">
                 <IconButton 
                     v-if="track.audioFile" 
-                    @click="playTrack(track)"
                     :data-testid="`play-track-${track.id}`"
+                    @click="playTrack(track)"
                 >
                     {{ isCurrentTrack(track) && isPlaying ? 'pause' : 'play_arrow' }}
                 </IconButton>
